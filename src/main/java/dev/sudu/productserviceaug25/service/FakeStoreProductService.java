@@ -1,10 +1,10 @@
 package dev.sudu.productserviceaug25.service;
 
 import dev.sudu.productserviceaug25.dtos.FakeStoreProductDto;
+import dev.sudu.productserviceaug25.exceptions.ProductNotFoundException;
 import dev.sudu.productserviceaug25.models.Category;
 import dev.sudu.productserviceaug25.models.Product;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,11 +35,17 @@ public class FakeStoreProductService implements ProductService {
     }
 
     @Override
-    public Product getSingleProduct(Long productId) {
+    public Product getSingleProduct(Long productId) throws ProductNotFoundException {
 //        make a http call to fakestore api to get the product with the given id.
 //        https://fakestoreapi.com/products/1
         ResponseEntity<FakeStoreProductDto> responseEntity = restTemplate.getForEntity("https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class);
 
+        FakeStoreProductDto fakeStoreProductDto = responseEntity.getBody();
+
+        if(fakeStoreProductDto == null) {
+            // Invalid product id
+            throw new ProductNotFoundException(productId);
+        }
         return convertFakeStoreProductDtoToProduct(responseEntity.getBody());
     }
 
