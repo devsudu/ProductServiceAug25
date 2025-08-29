@@ -1,20 +1,17 @@
-package dev.sudu.productserviceaug25.models;
+package dev.sudu.productserviceaug25.inheritancedemo.mappedsuperclass;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
-
-//@Data
 @Getter
 @Setter
 @MappedSuperclass
-public class BaseModel {
+public class User {
     @Id
     private Long id;
-    private Date createdAt;
-    private Date modifiedAt;
+    private String name;
+    private String email;
+    private String password;
 }
